@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+//Проверка Git
+
 namespace Diplom
 {
     public partial class FormMain : Form
