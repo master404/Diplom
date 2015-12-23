@@ -20,9 +20,10 @@ namespace Diplom
             InitializeComponent();
         }
 
+        FormCreate fc = new FormCreate();
         private void создатьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            fc.Show();
         }
 
         private void открытьToolStripMenuItem_Click(object sender, EventArgs e)
@@ -30,10 +31,10 @@ namespace Diplom
 
         }
 
-        FormLoad f =new FormLoad();
+        FormLoad fl =new FormLoad();
         private void проектtxtToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            f.Show();
+            fl.Show();
         }
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -42,15 +43,15 @@ namespace Diplom
         }
         private void FormMain_Activate(object sender, EventArgs e)
         {
-            if (f.flag == true)
+            if (fl.flag == true)
             {
                 textBox1.Text = "";
                 int i, j;
-                for (i = 0; i < f.linlen; i++ )
+                for (i = 0; i < fl.linlen; i++ )
                 {
-                    for (j = 0; j < f.razm; j++)
+                    for (j = 0; j < fl.razm; j++)
                     {
-                        textBox1.Text = textBox1.Text + f.numbersmas[i,j] + " ";
+                        textBox1.Text = textBox1.Text + fl.numbersmas[i,j] + " ";
                     }
                     textBox1.Text = textBox1.Text + Environment.NewLine; 
                 }
