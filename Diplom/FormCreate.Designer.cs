@@ -116,7 +116,6 @@
             this.Name = "FormCreate";
             this.Text = "FormCreate";
             this.Activated += new System.EventHandler(this.FormCreate_Activated);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormCreate_FormClosing);
             this.Load += new System.EventHandler(this.FormCreate_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

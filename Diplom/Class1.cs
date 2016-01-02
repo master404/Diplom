@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+
 
 namespace Diplom
 {
@@ -113,6 +115,24 @@ namespace Diplom
             }
             return The_point_is;
         }
-
+        public void Save_Project(string path)
+        {
+            string edges;
+            foreach (var n in Node)
+            {
+                edges = "";
+                foreach (int edge in n.Value.L)
+                    {
+                        edges=edges+edge+" ";
+                    }
+                using (StreamWriter sw = File.AppendText(path))
+                {
+                    sw.WriteLine("Point Num:" + n.Key + "\r\nX:" + n.Value.x + "\r\nY:" + n.Value.y + "\r\nEdges:\r\n" + edges + "\r\n");
+                }
+            }
+        }
     }
+
+
+
 }

@@ -23,7 +23,7 @@ namespace Diplom
         FormCreate fc = new FormCreate();
         private void создатьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            fc.Show();
+            fc.ShowDialog();
         }
 
         private void открытьToolStripMenuItem_Click(object sender, EventArgs e)
@@ -55,7 +55,16 @@ namespace Diplom
                     }
                     textBox1.Text = textBox1.Text + Environment.NewLine; 
                 }
-            } 
+                fl.flag = false;
+            }
+            if (fc.path != "")
+            {
+                pictureBox1.BackColor = Color.White;
+                pictureBox1.Enabled = true;
+                textBox1.BackColor = Color.White;
+                textBox1.Enabled = true;
+                label2.Text = fc.path+"\\"+fc.name;
+            }
         }
 
         bool Add_edge = false, p_moving=false;//добавить ребро,флаг перемещения узла
@@ -66,38 +75,46 @@ namespace Diplom
         {
             label1.Text = "";
             p_moving = false;
-            if (e.Button == MouseButtons.Left)
+            try
             {
-                pictureBox1.Invalidate();
-                if (Add_edge)
+                if (e.Button == MouseButtons.Left)
                 {
-                    Add_edge = false;
-                    Point.Save_cord(e.X, e.Y, d / 2, 2);
-                    if (Point.ThePointIs(e.X, e.Y, d / 2) && Point.Point_num_1!=Point.Point_num_2)
+                    pictureBox1.Invalidate();
+                    if (Add_edge)
                     {
-                        Point.Add_edge();
+                        Add_edge = false;
+                        Point.Save_cord(e.X, e.Y, d / 2, 2);
+                        if (Point.ThePointIs(e.X, e.Y, d / 2) && Point.Point_num_1 != Point.Point_num_2)
+                        {
+                            Point.Add_edge();
+                        }
+                        else
+                        { label1.Text = "Неверно выбран узел"; }
+                    }
+                    else if (Point.ThePointIs(e.X, e.Y, d))
+                    {
+                        Point.Save_cord(e.X, e.Y, d / 2, 1);
+                        p_moving = true;
                     }
                     else
-                    {label1.Text = "Неверно выбран узел"; }
+                    {
+                        Point.Add_To_Dict(e.X, e.Y, d);
+                    }
                 }
-                else if (Point.ThePointIs(e.X,e.Y,d))
+                if (e.Button == MouseButtons.Right)
                 {
-                    Point.Save_cord(e.X, e.Y, d / 2, 1);
-                    p_moving = true;
-                }
-                else
-                {
-                    Point.Add_To_Dict(e.X, e.Y, d);
+                    if (Point.ThePointIs(e.X, e.Y, d / 2))
+                    {
+                        Point.Save_cord(e.X, e.Y, d / 2, 1);
+                        contextMenuStrip1.Show(MousePosition, ToolStripDropDownDirection.Right);
+                    }
                 }
             }
-            if (e.Button == MouseButtons.Right)
+            catch (Exception error)
             {
-                if (Point.ThePointIs(e.X,e.Y,d/2))
-                {
-                    Point.Save_cord(e.X, e.Y, d / 2,1);
-                    contextMenuStrip1.Show(MousePosition, ToolStripDropDownDirection.Right);
-                }
+                label1.Text = "Ошибка:" + error.ToString() + ".";
             }
+
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
@@ -144,6 +161,12 @@ namespace Diplom
                     pictureBox1.Invalidate();
                 }
             }
+        }
+
+        private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string pathname = fc.path + "\\" + fc.name;
+            Point.Save_Project(pathname);   
         }
      }
 }
