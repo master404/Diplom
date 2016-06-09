@@ -85,6 +85,7 @@ namespace Diplom
                 K.L = list;
                 Node[P2] = K;
         }
+
         public void Del_node()
         {
             Node.Remove(Point_num_1);
@@ -103,18 +104,46 @@ namespace Diplom
             K.y = y;
             Node[P] = K;
         }
+
         public bool ThePointIs_mov(int x, int y, int d)//Есть ли здесь точка(узел)
         {
-            bool The_point_is = false;
+
             foreach (var nd in Node)
             {
                 if (nd.Key != Point_num_1)
                 {
-                    if (Math.Sqrt(Math.Pow((x - nd.Value.x), 2) + Math.Pow((y - nd.Value.y), 2)) <= d && num != 0) The_point_is = true;
+                    if (Math.Sqrt(Math.Pow((x - nd.Value.x), 2) + Math.Pow((y - nd.Value.y), 2)) <= d && num != 0) return true;
                 }
             }
-            return The_point_is;
+            return false;
         }
+
+        public int Edge_num_1, Edge_num_2;
+        public bool TheLineIs(int x, int y, int d)
+        {
+            d = d * 3;
+            foreach (var nd in Node)
+            {
+                foreach(var l in nd.Value.L)
+                {
+                    if ((x - nd.Value.x) * ((Node[l].y-d) - (nd.Value.y-d)) - (Node[l].x - nd.Value.x) * (y - (nd.Value.y-d)) >=0 && (x - nd.Value.x) * ((Node[l].y+d) - (nd.Value.y+d)) - (Node[l].x - nd.Value.x) * (y - (nd.Value.y+d))<=0)
+                    {
+                        Edge_num_1 = nd.Key;
+                        Edge_num_2 = l;
+                        return true;
+                    }
+                }
+                
+            }
+            return false;
+        }
+
+        public void Del_edge()
+        {
+            Node[Edge_num_1].L.Remove(Edge_num_2);
+            Node[Edge_num_2].L.Remove(Edge_num_1); 
+        }
+
         public void Save_Project(string path)
         {
             string edges;
@@ -123,14 +152,16 @@ namespace Diplom
                 edges = "";
                 foreach (int edge in n.Value.L)
                     {
-                        edges=edges+edge+" ";
+                        edges=edges+edge;
                     }
                 using (StreamWriter sw = File.AppendText(path))
                 {
-                    sw.WriteLine("Point Num:" + n.Key + "\r\nX:" + n.Value.x + "\r\nY:" + n.Value.y + "\r\nEdges:\r\n" + edges + "\r\n");
+                    sw.WriteLine(n.Key + " " + n.Value.x + " " + n.Value.y + " " + edges);
                 }
             }
         }
+
+
     }
 
 

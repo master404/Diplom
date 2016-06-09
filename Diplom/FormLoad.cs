@@ -23,9 +23,10 @@ namespace Diplom
             LoadFile();
         }
 
-        public double[,] numbersmas;
+        public string[,] numbersmas;
         public bool flag=false;
         public int linlen, razm = 0;
+        public string path="";
 
         public void LoadFile()
         {
@@ -50,13 +51,14 @@ namespace Diplom
                 char razdelitel = ' ';
                 int i = 0, j;
                 string[] numbers;
-                numbersmas = new double[lines.Length,50];
+                numbersmas = new string[50,50];
                 textBox2.Text = "";
                 progressBar1.Value = 0;
                 if (lines.Length > 0 && n < 1) progressBar1.Increment(1);
                 foreach (string line in lines)
                 {
                     j = 0;
+                    i = 0;
                     if (n < 1)
                     {
                         nak += n;
@@ -74,19 +76,23 @@ namespace Diplom
                     }
                     textBox2.Text = textBox2.Text + line + Environment.NewLine;
                     numbers = line.Split(razdelitel);
-                    try
-                    {
-                        foreach (string s in numbers) { numbersmas[i, j] = Convert.ToDouble(s); j++; }
+                    //try
+                    //{
+                    foreach (string s in numbers) {
+                        textBox2.Text = textBox2.Text + s + " ";    
+                        numbersmas[i, j] = s;
+                        j++; 
                     }
-                    catch (FormatException) { error1 = true; break; }
-                    if (i == 0) razm = j;//Запоминаю начальную размерность
-                    if (razm != j) { error2 = true; break; }
+                    //}
+                    //catch (FormatException) { error1 = true; break; }
+                   // if (i == 0) razm = j;//Запоминаю начальную размерность
+                   // if (razm != j) { error2 = true; break; }
                     i++;
                 }
                 if (error1 == true) { textBox3.Text = textBox3.Text + "Неверный формат данных в файле (симв.)" + Environment.NewLine; }
-                else if (error2 == true) { textBox3.Text = textBox3.Text + "Неверный формат данных в файле (размерность)" + Environment.NewLine;}
-                else if (progressBar1.Value >= 100) { textBox3.Text = textBox3.Text + "Файл \"" + Path.GetFileName(dialog.FileName) + "\" успешно загружен" + Environment.NewLine; button3.Visible = true;}
-                else if (progressBar1.Value == 0) { textBox3.Text = textBox3.Text + "Файл \"" + Path.GetFileName(dialog.FileName) + "\" успешно загружен(не содержит текста)" + Environment.NewLine; }
+               // else if (error2 == true) { textBox3.Text = textBox3.Text + "Неверный формат данных в файле (размерность)" + Environment.NewLine;}
+                else if (progressBar1.Value >= 100) { textBox3.Text = textBox3.Text + "Файл \"" + Path.GetFileName(dialog.FileName) + "\" успешно загружен" + Environment.NewLine; button3.Visible = true; path = dialog.FileName; }
+                else if (progressBar1.Value == 0) { textBox3.Text = textBox3.Text + "Файл \"" + Path.GetFileName(dialog.FileName) + "\" успешно загружен(пустой)" + Environment.NewLine; button3.Visible = true; path = dialog.FileName; }
                 else { textBox3.Text = textBox3.Text + "Ошибка загрузки файла" + Environment.NewLine; }
              }
         }

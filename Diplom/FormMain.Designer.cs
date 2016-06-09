@@ -68,9 +68,12 @@
             this.удалитьЭлементToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.удалитьРеброToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
+            this.contextMenuStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -394,6 +397,20 @@
             this.label2.Size = new System.Drawing.Size(356, 19);
             this.label2.TabIndex = 4;
             // 
+            // contextMenuStrip2
+            // 
+            this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.удалитьРеброToolStripMenuItem});
+            this.contextMenuStrip2.Name = "contextMenuStrip2";
+            this.contextMenuStrip2.Size = new System.Drawing.Size(156, 48);
+            // 
+            // удалитьРеброToolStripMenuItem
+            // 
+            this.удалитьРеброToolStripMenuItem.Name = "удалитьРеброToolStripMenuItem";
+            this.удалитьРеброToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.удалитьРеброToolStripMenuItem.Text = "Удалить ребро";
+            this.удалитьРеброToolStripMenuItem.Click += new System.EventHandler(this.удалитьРеброToolStripMenuItem_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -413,6 +430,7 @@
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
+            this.contextMenuStrip2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -458,5 +476,7 @@
         private System.Windows.Forms.ToolStripMenuItem добавитьРеброToolStripMenuItem;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
+        private System.Windows.Forms.ToolStripMenuItem удалитьРеброToolStripMenuItem;
     }
 }

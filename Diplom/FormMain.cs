@@ -35,6 +35,7 @@ namespace Diplom
         private void проектtxtToolStripMenuItem_Click(object sender, EventArgs e)
         {
             fl.Show();
+
         }
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -47,9 +48,9 @@ namespace Diplom
             {
                 textBox1.Text = "";
                 int i, j;
-                for (i = 0; i < fl.linlen; i++ )
+                for (i = 0; i < 50; i++ )
                 {
-                    for (j = 0; j < fl.razm; j++)
+                    for (j = 0; j < 50; j++)
                     {
                         textBox1.Text = textBox1.Text + fl.numbersmas[i,j] + " ";
                     }
@@ -65,10 +66,20 @@ namespace Diplom
                 textBox1.Enabled = true;
                 label2.Text = fc.path+"\\"+fc.name;
             }
+            else if (fl.path != "")
+            {
+                pictureBox1.BackColor = Color.White;
+                pictureBox1.Enabled = true;
+                textBox1.BackColor = Color.White;
+                textBox1.Enabled = true;
+                label2.Text = fl.path;
+            }
+
+
         }
 
         bool Add_edge = false, p_moving=false;//добавить ребро,флаг перемещения узла
-        int d = 48;
+        int d = 48,dl=7;
 
         Point Point=new Point();
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
@@ -108,6 +119,12 @@ namespace Diplom
                         Point.Save_cord(e.X, e.Y, d / 2, 1);
                         contextMenuStrip1.Show(MousePosition, ToolStripDropDownDirection.Right);
                     }
+                    else
+                    if (Point.TheLineIs(e.X, e.Y, dl))
+                    {
+                        contextMenuStrip2.Show(MousePosition, ToolStripDropDownDirection.Right);
+                    }
+
                 }
             }
             catch (Exception error)
@@ -119,7 +136,7 @@ namespace Diplom
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
-            Pen pen = new Pen(Color.FromArgb(100, 0, 255, 0), 7);
+            Pen pen = new Pen(Color.FromArgb(100, 0, 255, 0), dl);
             Image img = Properties.Resources.circle_blue__1_;
             foreach (var nd in Point.Node)
             {
@@ -167,6 +184,12 @@ namespace Diplom
         {
             string pathname = fc.path + "\\" + fc.name;
             Point.Save_Project(pathname);   
+        }
+
+        private void удалитьРеброToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Point.Del_edge();
+            pictureBox1.Invalidate();
         }
      }
 }
