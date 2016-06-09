@@ -23,6 +23,9 @@ namespace Diplom
         FormCreate fc = new FormCreate();
         private void создатьToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            textBox1.Text = "";
+            Point.Node.Clear();
+            pictureBox1.Invalidate();
             fc.ShowDialog();
         }
 
@@ -44,19 +47,43 @@ namespace Diplom
         }
         private void FormMain_Activate(object sender, EventArgs e)
         {
+            /*
+            pictureBox1.BackColor = Color.White;
+            pictureBox1.Enabled = true;
+            textBox1.BackColor = Color.White;
+            textBox1.Enabled = true;
+            label2.Text = fc.path + "\\" + fc.name;
+            */
             if (fl.flag == true)
             {
+                fl.flag = false;
                 textBox1.Text = "";
                 int i, j;
+                Point.Node.Clear();
                 for (i = 0; i < 50; i++ )
                 {
+                   // MessageBox.Show("" + i);
+                    if (fl.numbersmas[i, 0] != "")
+                    {
+                        Point.Add_To_Dict_L(Convert.ToInt32(fl.numbersmas[i, 0]), Convert.ToInt32(fl.numbersmas[i, 1]), Convert.ToInt32(fl.numbersmas[i, 2]), d);
+                        Point.num = Convert.ToInt32(fl.numbersmas[i, 0]);
+                    }
+                    else { break; }
                     for (j = 0; j < 50; j++)
                     {
+                        if(j>2)
+                        {
+                            if(fl.numbersmas[i, j]!="")
+                            {
+                                Point.Add_edge(Convert.ToInt32(fl.numbersmas[i, 0]), Convert.ToInt32(fl.numbersmas[i, j]));
+                            }
+                        }
                         textBox1.Text = textBox1.Text + fl.numbersmas[i,j] + " ";
+                    
                     }
                     textBox1.Text = textBox1.Text + Environment.NewLine; 
                 }
-                fl.flag = false;
+                pictureBox1.Invalidate();
             }
             if (fc.path != "")
             {
@@ -182,7 +209,15 @@ namespace Diplom
 
         private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string pathname = fc.path + "\\" + fc.name;
+            string pathname = "";
+            if (fc.path != "")
+            {
+                pathname = fc.path + "\\" + fc.name;
+            }
+            else if (fl.path != "")
+            {
+                pathname = fl.path;
+            }
             Point.Save_Project(pathname);   
         }
 

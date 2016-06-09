@@ -55,40 +55,49 @@ namespace Diplom
                 textBox2.Text = "";
                 progressBar1.Value = 0;
                 if (lines.Length > 0 && n < 1) progressBar1.Increment(1);
-                foreach (string line in lines)
+                for (i = 0; i < 50;i++ )
                 {
-                    j = 0;
-                    i = 0;
-                    if (n < 1)
+                    for (j = 0; j < 50; j++)
                     {
-                        nak += n;
-                        if (nak >= 1)
+                        numbersmas[i, j] = "";
+                    }
+                }
+                i = 0;
+                foreach (string line in lines)
+                    {
+                        j = 0;
+                        if (n < 1)
                         {
-                            progressBar1.Increment(1);
+                            nak += n;
+                            if (nak >= 1)
+                            {
+                                progressBar1.Increment(1);
+                                nak = nak % 1;
+                            }
+                        }
+                        else
+                        {
+                            nak += n;
+                            progressBar1.Increment(Convert.ToInt32(nak / 1));
                             nak = nak % 1;
                         }
+                        textBox2.Text = textBox2.Text + line + Environment.NewLine;
+                        numbers = line.Split(razdelitel);
+                        //try
+                        //{
+                        
+                        foreach (string s in numbers)
+                        {
+                            //textBox2.Text = textBox2.Text + s + " ";
+                            numbersmas[i, j] = s;
+                            j++;
+                        }
+                        //}
+                        //catch (FormatException) { error1 = true; break; }
+                        // if (i == 0) razm = j;//Запоминаю начальную размерность
+                        // if (razm != j) { error2 = true; break; }
+                        i++;
                     }
-                    else
-                    {
-                        nak += n;
-                        progressBar1.Increment(Convert.ToInt32(nak / 1));
-                        nak = nak % 1;
-                    }
-                    textBox2.Text = textBox2.Text + line + Environment.NewLine;
-                    numbers = line.Split(razdelitel);
-                    //try
-                    //{
-                    foreach (string s in numbers) {
-                        textBox2.Text = textBox2.Text + s + " ";    
-                        numbersmas[i, j] = s;
-                        j++; 
-                    }
-                    //}
-                    //catch (FormatException) { error1 = true; break; }
-                   // if (i == 0) razm = j;//Запоминаю начальную размерность
-                   // if (razm != j) { error2 = true; break; }
-                    i++;
-                }
                 if (error1 == true) { textBox3.Text = textBox3.Text + "Неверный формат данных в файле (симв.)" + Environment.NewLine; }
                // else if (error2 == true) { textBox3.Text = textBox3.Text + "Неверный формат данных в файле (размерность)" + Environment.NewLine;}
                 else if (progressBar1.Value >= 100) { textBox3.Text = textBox3.Text + "Файл \"" + Path.GetFileName(dialog.FileName) + "\" успешно загружен" + Environment.NewLine; button3.Visible = true; path = dialog.FileName; }

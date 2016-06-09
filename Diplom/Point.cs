@@ -23,18 +23,26 @@ namespace Diplom
     public class Point
     {
         public Dictionary<int, AddPoint> Node = new Dictionary<int, AddPoint>(100);
-        int num = 0; //num-кол-во узлов
+        public int num = 0; //num-кол-во узлов
 
         public Point()
         {
         }
 
+
         public void Add_To_Dict(int x,int y,int d) //Добавляем точку в словарь
         {
-            List<int> list = new List<int>(50);
+            List<int> list = new List<int>(25);
             AddPoint P = new AddPoint(x, y, list);
             num++;
             Node.Add(num, P);    //Добавляем в словарь
+        }
+
+        public void Add_To_Dict_L(int num2,int x, int y, int d) //Добавляем точку в словарь при загрузке с файла
+        {
+            List<int> list = new List<int>(25);
+            AddPoint P = new AddPoint(x, y, list);
+            Node.Add(num2, P);    //Добавляем в словарь
         }
 
         public bool ThePointIs(int x, int y,int d)//Есть ли здесь точка(узел)
@@ -84,6 +92,17 @@ namespace Diplom
                 list.Add(P1);
                 K.L = list;
                 Node[P2] = K;
+        }
+
+        public void Add_edge(int P1,int P2)//Добавляем ребро к точкам при загрузке
+        {
+            List<int> list = new List<int>(50);
+            AddPoint K = new AddPoint();
+            K = Node[P1];
+            list = K.L;
+            list.Add(P2);
+            K.L = list;
+            Node[P1] = K;
         }
 
         public void Del_node()
@@ -147,12 +166,14 @@ namespace Diplom
         public void Save_Project(string path)
         {
             string edges;
+            FileStream fs = File.Create(path);
+            fs.Close();
             foreach (var n in Node)
             {
                 edges = "";
                 foreach (int edge in n.Value.L)
                     {
-                        edges=edges+edge;
+                        edges=edges+edge+" ";
                     }
                 using (StreamWriter sw = File.AppendText(path))
                 {
