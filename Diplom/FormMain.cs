@@ -173,9 +173,10 @@ namespace Diplom
             }
 
         }
-
+        Label[] labels = new Label[25];
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
+            
             Pen pen = new Pen(Color.FromArgb(100, 0, 255, 0), dl);
             Image img = Properties.Resources.circle_blue__1_;
             foreach (var nd in Point.Node)
@@ -185,10 +186,29 @@ namespace Diplom
                     e.Graphics.DrawLine(pen, nd.Value.x, nd.Value.y, Point.Node[s].x, Point.Node[s].y);
                 }
             }
-            foreach (var nd in Point.Node)
+            int i;
+            for (i = 0; i < 25;i++ )
             {
-                e.Graphics.DrawImage(img, nd.Value.x - d / 2, nd.Value.y - d / 2, d, d);
+                if (labels[i] != null)
+                {
+                    labels[i].Dispose();
+                }
             }
+            i = 0;
+                foreach (var nd in Point.Node)
+                {
+                    e.Graphics.DrawImage(img, nd.Value.x - d / 2, nd.Value.y - d / 2, d, d);
+                    if (!p_moving)
+                    {
+                        labels[i] = new Label();
+                        labels[i].Width = 20;
+                        labels[i].Height = 16;
+                        labels[i].Location = new System.Drawing.Point(nd.Value.x-8, nd.Value.y-40);
+                        labels[i].Text = nd.Key.ToString();
+                        pictureBox1.Controls.Add(labels[i]);
+                    }
+                    i++;
+                }
         }
 
         private void добавитьРеброToolStripMenuItem_Click(object sender, EventArgs e)
@@ -207,6 +227,7 @@ namespace Diplom
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
             p_moving = false;
+            pictureBox1.Invalidate();
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
@@ -257,7 +278,7 @@ namespace Diplom
                     {
                         if (Point.w_f[i, 0] != 0)
                         {
-                            textBox1.Text = textBox1.Text + Point.w_f[i, 0] + " " + Point.w_f[i, 1] + " " + Point.w_f[i, 2];
+                            textBox1.Text = textBox1.Text + "("+Point.w_f[i, 0] + ";" + Point.w_f[i, 1] + ") вес ребра: " + Point.w_f[i, 2];
                             textBox1.Text = textBox1.Text + Environment.NewLine;
                         }
 
