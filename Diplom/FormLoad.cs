@@ -24,12 +24,14 @@ namespace Diplom
         }
 
         public string[,] numbersmas;
+        public string[,] numbersmas2;
         public bool flag=false;
         public int linlen, razm = 0;
         public string path="";
 
         public void LoadFile()
         {
+            bool flag_razd = false;
             textBox2.Text = "";
             button3.Visible = false;
             string r = Path.GetExtension(dialog.FileName);
@@ -50,8 +52,10 @@ namespace Diplom
                 double nak = 0, n = 100.0 / lines.Length;
                 char razdelitel = ' ';
                 int i = 0, j;
+                int i2 = 0, j2 = 0;
                 string[] numbers;
                 numbersmas = new string[50,50];
+                numbersmas2 = new string[50, 50];
                 textBox2.Text = "";
                 progressBar1.Value = 0;
                 if (lines.Length > 0 && n < 1) progressBar1.Increment(1);
@@ -60,6 +64,7 @@ namespace Diplom
                     for (j = 0; j < 50; j++)
                     {
                         numbersmas[i, j] = "";
+                        numbersmas2[i, j] = "";
                     }
                 }
                 i = 0;
@@ -85,12 +90,25 @@ namespace Diplom
                         numbers = line.Split(razdelitel);
                         //try
                         //{
-                        
-                        foreach (string s in numbers)
+                        if (line == "--------------------------------") flag_razd = true;
+                        if (flag_razd == false)
                         {
-                            //textBox2.Text = textBox2.Text + s + " ";
-                            numbersmas[i, j] = s;
-                            j++;
+                            foreach (string s in numbers)
+                            {
+                                //textBox2.Text = textBox2.Text + s + " ";
+                                numbersmas[i, j] = s;
+                                j++;
+                            }
+                        }
+                        else if (line != "--------------------------------")
+                        {
+                            j2=0;
+                            foreach (string s in numbers)
+                            {
+                                numbersmas2[i2, j2] = s;
+                                j2++;
+                            }
+                            i2++;
                         }
                         //}
                         //catch (FormatException) { error1 = true; break; }

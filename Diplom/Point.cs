@@ -23,10 +23,19 @@ namespace Diplom
     public class Point
     {
         public Dictionary<int, AddPoint> Node = new Dictionary<int, AddPoint>(100);
+        public int[,] w_f = new int[25,4];
         public int num = 0; //num-кол-во узлов
 
         public Point()
         {
+            for(int i=0;i<25;i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    w_f[i, j] = 0;
+                    if (j == 2) { w_f[i, j] = -1; }
+                }
+            }
         }
 
 
@@ -36,6 +45,20 @@ namespace Diplom
             AddPoint P = new AddPoint(x, y, list);
             num++;
             Node.Add(num, P);    //Добавляем в словарь
+        }
+
+        public void Save_in_wf(int P1, int P2) //Добавляем ребро в массив w_f
+        {
+            for (int i = 0; i < 25; i++)
+            {
+                if (w_f[i, 0] == 0)
+                {
+                    w_f[i, 0] = P1;
+                    w_f[i, 1] = P2;
+                    break;
+                }
+                
+            }
         }
 
         public void Add_To_Dict_L(int num2,int x, int y, int d) //Добавляем точку в словарь при загрузке с файла
@@ -92,6 +115,8 @@ namespace Diplom
                 list.Add(P1);
                 K.L = list;
                 Node[P2] = K;
+                Save_in_wf(P1,P2);
+
         }
 
         public void Add_edge(int P1,int P2)//Добавляем ребро к точкам при загрузке
@@ -111,6 +136,17 @@ namespace Diplom
             foreach (var nd in Node)
             {
                 nd.Value.L.Remove(Point_num_1);
+            }
+            for (int i = 0; i < 25; i++)
+            {
+                if (w_f[i, 0] == Point_num_1 || w_f[i, 1] == Point_num_1)
+                {
+                    w_f[i, 0] = 0;
+                    w_f[i, 1] = 0;
+                    w_f[i, 2] = -1;
+                    w_f[i, 3] = 0;
+                }
+
             }
         }
 
@@ -145,7 +181,7 @@ namespace Diplom
             {
                 foreach(var l in nd.Value.L)
                 {
-                    if ((x - nd.Value.x) * ((Node[l].y-d) - (nd.Value.y-d)) - (Node[l].x - nd.Value.x) * (y - (nd.Value.y-d)) >=0 && (x - nd.Value.x) * ((Node[l].y+d) - (nd.Value.y+d)) - (Node[l].x - nd.Value.x) * (y - (nd.Value.y+d))<=0)
+                    if ((x - nd.Value.x) * ((Node[l].y - d) - (nd.Value.y - d)) - (Node[l].x - nd.Value.x) * (y - (nd.Value.y - d)) >= 0 && (x - nd.Value.x) * ((Node[l].y + d) - (nd.Value.y + d)) - (Node[l].x - nd.Value.x) * (y - (nd.Value.y + d)) <= 0 && x <= nd.Value.x && x >= Node[l].x)
                     {
                         Edge_num_1 = nd.Key;
                         Edge_num_2 = l;
@@ -160,9 +196,32 @@ namespace Diplom
         public void Del_edge()
         {
             Node[Edge_num_1].L.Remove(Edge_num_2);
-            Node[Edge_num_2].L.Remove(Edge_num_1); 
+            Node[Edge_num_2].L.Remove(Edge_num_1);
+            for (int i = 0; i < 25; i++)
+            {
+                if (w_f[i, 0] == Edge_num_1 && w_f[i, 1] == Edge_num_2 || w_f[i, 1] == Edge_num_1 && w_f[i, 0] == Edge_num_2)
+                {
+                    w_f[i, 0] = 0;
+                    w_f[i, 1] = 0;
+                    w_f[i, 2] = -1;
+                    w_f[i, 3] = 0;
+                    break;
+                }
+
+            }
         }
 
+        public void Change_w(int w)//изменить вес
+        {
+            for (int i = 0; i < 25; i++)
+            {
+                if (w_f[i, 0] == Edge_num_1 && w_f[i, 1] == Edge_num_2 || w_f[i, 1] == Edge_num_1 && w_f[i, 0] == Edge_num_2)
+                {
+                    w_f[i, 2] = w; 
+                }
+
+            }
+        }
         public void Save_Project(string path)
         {
             string edges;
@@ -178,6 +237,17 @@ namespace Diplom
                 using (StreamWriter sw = File.AppendText(path))
                 {
                     sw.WriteLine(n.Key + " " + n.Value.x + " " + n.Value.y + " " + edges);
+                }
+            }
+            using (StreamWriter sw = File.AppendText(path))
+            {
+                sw.WriteLine("--------------------------------");
+                for (int i = 0; i < 25; i++)
+                {
+                    if (w_f[i, 0] != 0)
+                    {
+                        sw.WriteLine(w_f[i, 0] + " " + w_f[i, 1] + " " + w_f[i, 2] + " ");
+                    }
                 }
             }
         }

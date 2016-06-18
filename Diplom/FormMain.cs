@@ -68,7 +68,13 @@ namespace Diplom
                         Point.Add_To_Dict_L(Convert.ToInt32(fl.numbersmas[i, 0]), Convert.ToInt32(fl.numbersmas[i, 1]), Convert.ToInt32(fl.numbersmas[i, 2]), d);
                         Point.num = Convert.ToInt32(fl.numbersmas[i, 0]);
                     }
-                    else { break; }
+                    if (fl.numbersmas2[i, 0] != "")
+                    {
+                        Point.w_f[i, 0] = Convert.ToInt32(fl.numbersmas2[i, 0]);
+                        Point.w_f[i, 1] = Convert.ToInt32(fl.numbersmas2[i, 1]);
+                        Point.w_f[i, 2] = Convert.ToInt32(fl.numbersmas2[i, 2]);
+                    }
+                    if (fl.numbersmas[i, 0] == "" && fl.numbersmas2[i, 0] == "") { break; }
                     for (j = 0; j < 50; j++)
                     {
                         if(j>2)
@@ -78,12 +84,13 @@ namespace Diplom
                                 Point.Add_edge(Convert.ToInt32(fl.numbersmas[i, 0]), Convert.ToInt32(fl.numbersmas[i, j]));
                             }
                         }
-                        textBox1.Text = textBox1.Text + fl.numbersmas[i,j] + " ";
+                        //textBox1.Text = textBox1.Text + fl.numbersmas[i,j] + " ";
                     
                     }
-                    textBox1.Text = textBox1.Text + Environment.NewLine; 
+                    //textBox1.Text = textBox1.Text + Environment.NewLine; 
                 }
                 pictureBox1.Invalidate();
+                output_text();
             }
             if (fc.path != "")
             {
@@ -113,6 +120,7 @@ namespace Diplom
         {
             label1.Text = "";
             p_moving = false;
+        //    toolTip1.Hide(pictureBox1);
             try
             {
                 if (e.Button == MouseButtons.Left)
@@ -125,6 +133,7 @@ namespace Diplom
                         if (Point.ThePointIs(e.X, e.Y, d / 2) && Point.Point_num_1 != Point.Point_num_2)
                         {
                             Point.Add_edge();
+                            output_text();
                         }
                         else
                         { label1.Text = "Неверно выбран узел"; }
@@ -133,6 +142,10 @@ namespace Diplom
                     {
                         Point.Save_cord(e.X, e.Y, d / 2, 1);
                         p_moving = true;
+                    }
+                    else if (Point.TheLineIs(e.X, e.Y, dl))
+                    {
+                //        toolTip1.SetToolTip(pictureBox1, "Вес ребра:");
                     }
                     else
                     {
@@ -188,6 +201,7 @@ namespace Diplom
         {
             Point.Del_node();
             pictureBox1.Invalidate();
+            output_text();
         }
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
@@ -218,13 +232,56 @@ namespace Diplom
             {
                 pathname = fl.path;
             }
-            Point.Save_Project(pathname);   
+            Point.Save_Project(pathname);
+            //label1.Text = "Успешно сохранено";
         }
 
         private void удалитьРеброToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Point.Del_edge();
             pictureBox1.Invalidate();
+            output_text();
         }
+
+        private void изменитьВесToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            label3.Visible = true;
+            textBox2.Visible = true;
+            button2.Visible = true;
+        }
+
+        private void output_text()
+        {
+            textBox1.Text = "";
+                    for (int i = 0; i < 25; i++)
+                    {
+                        if (Point.w_f[i, 0] != 0)
+                        {
+                            textBox1.Text = textBox1.Text + Point.w_f[i, 0] + " " + Point.w_f[i, 1] + " " + Point.w_f[i, 2];
+                            textBox1.Text = textBox1.Text + Environment.NewLine;
+                        }
+
+                    }
+        }
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (textBox2.Text!="")
+            {
+                try
+                {
+                    int w = Convert.ToInt32(textBox2.Text);
+                    Point.Change_w(w);
+                    output_text();
+                }
+                catch { MessageBox.Show("Невереный тип данных"); }
+
+            }
+            button1.Focus();
+            textBox2.Text = "";
+            label3.Visible = false;
+            textBox2.Visible = false;
+            button2.Visible = false;
+        }
+
      }
 }
