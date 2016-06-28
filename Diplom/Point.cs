@@ -23,7 +23,7 @@ namespace Diplom
     public class Point
     {
         public Dictionary<int, AddPoint> Node = new Dictionary<int, AddPoint>(100);
-        public int[,] w_f = new int[25,4];
+        public double[,] w_f = new double[25,4];
         public int num = 0; //num-кол-во узлов
 
         public Point()
@@ -32,8 +32,12 @@ namespace Diplom
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    w_f[i, j] = 0;
+                    
                     if (j == 2) { w_f[i, j] = -1; }
+                    else
+                    if (j == 3) { w_f[i, j] = 0.01; }
+                    else
+                    { w_f[i, j] = 0; }
                 }
             }
         }
@@ -53,9 +57,18 @@ namespace Diplom
             {
                 if (w_f[i, 0] == 0)
                 {
-                    w_f[i, 0] = P1;
-                    w_f[i, 1] = P2;
-                    break;
+                    if (P1 < P2)
+                    {
+                        w_f[i, 0] = P1;
+                        w_f[i, 1] = P2;
+                        break;
+                    }
+                    else
+                    {
+                        w_f[i, 0] = P2;
+                        w_f[i, 1] = P1;
+                        break;
+                    }
                 }
                 
             }
@@ -251,10 +264,5 @@ namespace Diplom
                 }
             }
         }
-
-
     }
-
-
-
 }
